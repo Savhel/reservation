@@ -265,7 +265,7 @@ public class CoursController {
             
             // Créer le cours modifié
             Cours cours = new Cours();
-            cours.setIdCours(id);
+            cours.setId(id);
             cours.setSujet(sujet);
             cours.setNombreHeures(nombreHeures);
             cours.setJour(jour);

@@ -31,7 +31,7 @@ public class MaterielPedagogiqueController {
 
 
     // Créer un matériel
-    @PostMapping
+    @PostMapping("creer_un_Ordinateur")
     public ResponseEntity<MaterielPedagogique> creerMaterielOrdinateur(@RequestParam String nom, @RequestParam String marque, Ordinateur ordinateur) {
         MaterielPedagogique materiel = materielPedagogiqueService.creerMateriel(nom, marque);
         ordinateur.setMateriel(materiel);
@@ -39,7 +39,7 @@ public class MaterielPedagogiqueController {
         return new ResponseEntity<>(materiel, HttpStatus.CREATED);
     }
 
-    @PostMapping
+    @PostMapping("creer_un_VideoProjecteur")
     public ResponseEntity<MaterielPedagogique> creerMaterielVideoProjecteur(@RequestParam String nom, @RequestParam String marque, VideoProjecteur videoProjecteur) {
         MaterielPedagogique materiel = materielPedagogiqueService.creerMateriel(nom, marque);
         videoProjecteur.setMateriel(materiel);

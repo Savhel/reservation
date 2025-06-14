@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
 public class DTOMapper {
 
     public static SalleDTO toSalleDTO(Salle salle) {
-        return new SalleDTO(salle.getNumSalle(), salle.getNomSalle(), salle.getNbPlace());
+        return new SalleDTO(salle.getNumSalle(), salle.getNomSalle(), salle.getCapaciteMax());
     }
 
     public static EnseignantDTO toEnseignantDTO(Enseignant enseignant) {
         return new EnseignantDTO(enseignant.getMatricule(),enseignant.getMotDePasse(), enseignant.getNom(), enseignant.getPrenom(), enseignant.getMail(), enseignant.getTel());
     }
     public static CoursDTO toCoursDTO(Cours cours) {
-        return new CoursDTO(cours.getIdCours(), cours.getSujet(), cours.getNombreHeures(), cours.getJour(), cours.getHeure(), toEnseignantDTO(cours.getEnseignant()), cours.getSalle() != null ? toSalleDTO(cours.getSalle()) : null);
+        return new CoursDTO(cours.getId(), cours.getSujet(), cours.getNombreHeures(), cours.getJour(), cours.getHeure(), toEnseignantDTO(cours.getEnseignant()), cours.getSalle() != null ? toSalleDTO(cours.getSalle()) : null);
     }
     public static List<CoursDTO> toCoursDTOList(List<Cours> coursList) {
         return coursList.stream().map(cours -> toCoursDTO(cours)).collect(Collectors.toList());

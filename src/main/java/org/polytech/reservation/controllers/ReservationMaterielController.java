@@ -4,6 +4,7 @@ import org.polytech.reservation.exceptions.IDNotExist;
 import org.polytech.reservation.exceptions.ModificationImpossible;
 import org.polytech.reservation.exceptions.SuppressionImpossible;
 import org.polytech.reservation.models.ReservationMateriel;
+import org.polytech.reservation.service.MaterielPedagogiqueService;
 import org.polytech.reservation.service.ReservationMaterielService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/reservations/materiels")
@@ -22,6 +24,8 @@ public class ReservationMaterielController {
 
     @Autowired
     private ReservationMaterielService reservationMaterielService;
+    @Autowired
+    private MaterielPedagogiqueService materielPedagogiqueService;
 
     // Créer une réservation
     @PostMapping
@@ -100,26 +104,26 @@ public class ReservationMaterielController {
     }
 
     // Modifier une réservation
-    @PutMapping("/{id}")
-    public ResponseEntity<ReservationMateriel> modifierReservation(
-            @PathVariable UUID id,
-            @RequestParam String type,
-            @RequestParam UUID idMateriel,
-            @RequestParam UUID idCours,
-            @RequestParam String matriculeEnseignant,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateReservation,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime heureDebut,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime heureFin) {
-        try {
-            ReservationMateriel reservation = reservationMaterielService.modifierReservation(
-                    id, type, idMateriel, idCours, matriculeEnseignant, dateReservation, heureDebut, heureFin);
-            return new ResponseEntity<>(reservation, HttpStatus.OK);
-        } catch (IDNotExist e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (ModificationImpossible e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<ReservationMateriel> modifierReservation(
+//            @PathVariable UUID id,
+//            @RequestParam String type,
+//            @RequestParam UUID idMateriel,
+//            @RequestParam UUID idCours,
+//            @RequestParam String matriculeEnseignant,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateReservation,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime heureDebut,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime heureFin) {
+//        try {
+//            ReservationMateriel reservation = reservationMaterielService.modifierReservation(
+//                    id, type, idMateriel, idCours, matriculeEnseignant, dateReservation, heureDebut, heureFin);
+//            return new ResponseEntity<>(reservation, HttpStatus.OK);
+//        } catch (IDNotExist e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        } catch (ModificationImpossible e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
     // Confirmer une réservation
     @PatchMapping("/{id}/confirmer")
@@ -143,5 +147,16 @@ public class ReservationMaterielController {
         } catch (SuppressionImpossible e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/listesDesmaterielsLibres")
+    public ResponseEntity<?> MaterielsLibres(@RequestParam LocalDate date, @RequestParam LocalTime heure){
+
+        return ResponseEntity.ok(materielPedagogiqueService.getAllMateriels().stream()
+                    .filter(materielPedagogique -> materielPedagogique.getReservationMateriels()
+                            .stream().filter(p -> p.getDateReservation() != date )
+                            .isParallel() != true)
+                    .collect(Collectors.toList())) ;
+
     }
 }

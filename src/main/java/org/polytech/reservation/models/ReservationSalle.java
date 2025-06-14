@@ -49,6 +49,4 @@ public class ReservationSalle {
     @Column(nullable = false)
     private LocalTime heureFin;
 
-    @Column(nullable = false)
-    private boolean estConfirmee = false;
 }

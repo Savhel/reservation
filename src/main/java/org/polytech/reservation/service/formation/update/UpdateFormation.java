@@ -21,8 +21,8 @@ public class UpdateFormation implements Updatable<Formation> {
         Optional<Formation> oldFormation = formationRepository.findById(idFormation);
         if (oldFormation.isPresent()){
             Formation newFormation = oldFormation.get();
-            newFormation.setIntitule(formation.getIntitule());
-            newFormation.setNbPlaces(formation.getNbPlaces());
+            newFormation.setTheme(formation.getTheme());
+            newFormation.setNombreDePlaces(formation.getNombreDePlaces());
             newFormation.setEnseignantResponsable(formation.getEnseignantResponsable());
             newFormation.setCours(formation.getCours());
             return formationRepository.save(newFormation);

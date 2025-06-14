@@ -1,4 +1,4 @@
-package org.polytech.reservation.service.materielPedagogique.read;
+package org.polytech.reservation.service.materiel.read;
 
 import org.polytech.reservation.service.interfaces.Readable;
 import org.polytech.reservation.models.MaterielPedagogique;

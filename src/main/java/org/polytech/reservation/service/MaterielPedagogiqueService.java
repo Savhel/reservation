@@ -17,15 +17,11 @@ import java.util.UUID;
 @Service
 public class MaterielPedagogiqueService {
 
-    private final MaterielPedagogiqueRepository materielPedagogiqueRepository;
-    private final ReservationMaterielRepository reservationMaterielRepository;
-
     @Autowired
-    public MaterielPedagogiqueService(MaterielPedagogiqueRepository materielPedagogiqueRepository,
-                                     ReservationMaterielRepository reservationMaterielRepository) {
-        this.materielPedagogiqueRepository = materielPedagogiqueRepository;
-        this.reservationMaterielRepository = reservationMaterielRepository;
-    }
+    private MaterielPedagogiqueRepository materielPedagogiqueRepository;
+    @Autowired
+    private ReservationMaterielRepository reservationMaterielRepository;
+    
 
     // Créer un matériel
     public MaterielPedagogique creerMateriel(String nom, String marque) {

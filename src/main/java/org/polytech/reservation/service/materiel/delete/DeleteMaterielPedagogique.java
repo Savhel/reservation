@@ -1,4 +1,4 @@
-package org.polytech.reservation.service.materielPedagogique.delete;
+package org.polytech.reservation.service.materiel.delete;
 
 import org.polytech.reservation.models.MaterielPedagogique;
 import org.polytech.reservation.repositories.MaterielPedagogiqueRepository;

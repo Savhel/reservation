@@ -30,10 +30,10 @@ public interface ReservationMaterielRepository extends JpaRepository<Reservation
     
     // Trouver les réservations par date
     List<ReservationMateriel> findByDateReservation(LocalDate date);
-    
-    // Trouver les réservations par matériel et date
-    List<ReservationMateriel> findByMaterielIdAndDateReservation(UUID idMateriel, LocalDate date);
-    
+
+//    List<ReservationMateriel> findByMateriel_IdMaterielAndDateReservation(UUID idMateriel, LocalDate dateReservation);
+
+
     // Trouver les réservations par enseignant et date
     List<ReservationMateriel> findByEnseignantMatriculeAndDateReservation(String matricule, LocalDate date);
     

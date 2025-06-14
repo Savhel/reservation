@@ -10,8 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/salles")
@@ -21,13 +24,29 @@ public class SalleController {
     private SalleService salleService;
 
     // Créer une salle
-    @PostMapping
-    public ResponseEntity<Salle> creerSalle(
-            @RequestParam String nomSalle,
-            @RequestParam String localisation,
-            @RequestParam int capaciteMax) {
-        Salle salle = salleService.creerSalle(nomSalle, localisation, capaciteMax);
-        return new ResponseEntity<>(salle, HttpStatus.CREATED);
+//    @PostMapping
+//    public ResponseEntity<Salle> creerSalle(
+//            @RequestParam String nomSalle,
+//            @RequestParam String localisation,
+//            @RequestParam int capaciteMax) {
+//        Salle salle = salleService.creerSalle(nomSalle, localisation, capaciteMax);
+//        return new ResponseEntity<>(salle, HttpStatus.CREATED);
+//    }
+
+    // Obtenir toutes les salles
+    @GetMapping("/LesSallesLibres")
+    public ResponseEntity<List<Salle>> getAllSallesLibre(@RequestParam LocalDate date, @RequestParam LocalTime heure) {
+        System.out.println(salleService.getAllSalles().stream()
+                .filter(p -> p.getReservations().isEmpty() || p.getReservations()
+                        .stream().filter(s -> s.getDateReservation() != date)
+                        .isParallel())
+                .collect(Collectors.toList()));
+        List<Salle> salles = salleService.getAllSalles().stream()
+                .filter(p -> p.getReservations().isEmpty() || p.getReservations()
+                        .stream().filter(s -> s.getDateReservation() != date)
+                        .isParallel())
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(salles, HttpStatus.OK);
     }
 
     // Obtenir toutes les salles

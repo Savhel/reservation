@@ -15,7 +15,7 @@ public class MaterielPedagogique {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID idMateriel;
+    private UUID id;
 
     @NonNull
     @Column(nullable = false)

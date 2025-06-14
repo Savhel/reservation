@@ -1,5 +1,6 @@
 package org.polytech.reservation.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.polytech.reservation.exceptions.IDNotExist;
 import org.polytech.reservation.exceptions.ModificationImpossible;
 import org.polytech.reservation.exceptions.SuppressionImpossible;
@@ -56,9 +57,9 @@ public class ReservationMaterielService {
                 .orElseThrow(() -> new IDNotExist("Enseignant non trouvé"));
 
         // Vérifier la disponibilité du matériel
-        if (!estMaterielDisponible(idMateriel, dateReservation, heureDebut, heureFin)) {
-            throw new ModificationImpossible("Le matériel n'est pas disponible pour cette période");
-        }
+//        if (!estMaterielDisponible(idMateriel, dateReservation, heureDebut, heureFin)) {
+//            throw new ModificationImpossible("Le matériel n'est pas disponible pour cette période");
+//        }
 
         // Créer la réservation
         ReservationMateriel reservation = new ReservationMateriel();
@@ -75,19 +76,19 @@ public class ReservationMaterielService {
     }
 
     // Vérifier la disponibilité du matériel
-    public boolean estMaterielDisponible(UUID idMateriel, LocalDate date, LocalTime heureDebut, LocalTime heureFin) {
-        List<ReservationMateriel> reservations = reservationMaterielRepository.findByMaterielIdAndDateReservation(idMateriel, date);
-
-        for (ReservationMateriel reservation : reservations) {
-            // Vérifier si les plages horaires se chevauchent
-            if ((heureDebut.isBefore(reservation.getHeureFin()) || heureDebut.equals(reservation.getHeureFin())) &&
-                    (heureFin.isAfter(reservation.getHeureDebut()) || heureFin.equals(reservation.getHeureDebut()))) {
-                return false;
-            }
-        }
-
-        return true;
-    }
+//    public boolean estMaterielDisponible(UUID idMateriel, LocalDate date, LocalTime heureDebut, LocalTime heureFin) {
+//        List<ReservationMateriel> reservations = reservationMaterielRepository.findByMateriel_IdMaterielAndDateReservation(idMateriel, date);
+//
+//        for (ReservationMateriel reservation : reservations) {
+//            // Vérifier si les plages horaires se chevauchent
+//            if ((heureDebut.isBefore(reservation.getHeureFin()) || heureDebut.equals(reservation.getHeureFin())) &&
+//                    (heureFin.isAfter(reservation.getHeureDebut()) || heureFin.equals(reservation.getHeureDebut()))) {
+//                return false;
+//            }
+//        }
+//
+//        return true;
+//    }
 
     // Obtenir toutes les réservations
     public List<ReservationMateriel> getAllReservations() {
@@ -127,58 +128,69 @@ public class ReservationMaterielService {
     }
 
     // Modifier une réservation
-    public ReservationMateriel modifierReservation(UUID id, String type, UUID idMateriel, UUID idCours,
-                                                   String matriculeEnseignant, LocalDate dateReservation,
-                                                   LocalTime heureDebut, LocalTime heureFin) throws IDNotExist, ModificationImpossible {
-        // Vérifier que la réservation existe
-        ReservationMateriel reservation = reservationMaterielRepository.findById(id)
-                .orElseThrow(() -> new IDNotExist("Réservation non trouvée"));
-
-        // Si la réservation est déjà confirmée, on ne peut pas la modifier
-        if (reservation.isConfirmee()) {
-            throw new ModificationImpossible("Impossible de modifier une réservation confirmée");
-        }
-
-        // Vérifier que le matériel existe
-        MaterielPedagogique materiel = materielRepository.findById(idMateriel)
-                .orElseThrow(() -> new IDNotExist("Matériel non trouvé"));
-
-        // Vérifier que le cours existe
-        Cours cours = coursRepository.findById(idCours)
-                .orElseThrow(() -> new IDNotExist("Cours non trouvé"));
-
-        // Vérifier que l'enseignant existe
-        Enseignant enseignant = enseignantRepository.findByMatricule(matriculeEnseignant)
-                .orElseThrow(() -> new IDNotExist("Enseignant non trouvé"));
-
-        // Si on change de matériel ou de date/heure, vérifier la disponibilité
-        if (!reservation.getMateriel().getIdMateriel().equals(idMateriel) ||
-                !reservation.getDateReservation().equals(dateReservation) ||
-                !reservation.getHeureDebut().equals(heureDebut) ||
-                !reservation.getHeureFin().equals(heureFin)) {
-
-            // Vérifier la disponibilité du matériel (en excluant la réservation actuelle)
-            List<ReservationMateriel> reservations = reservationMaterielRepository.findByMaterielIdAndDateReservation(idMateriel, dateReservation);
-            for (ReservationMateriel res : reservations) {
-                if (!res.getIdReservation().equals(id) && // Exclure la réservation actuelle
-                        (heureDebut.isBefore(res.getHeureFin()) || heureDebut.equals(res.getHeureFin())) &&
-                        (heureFin.isAfter(res.getHeureDebut()) || heureFin.equals(res.getHeureDebut()))) {
-                    throw new ModificationImpossible("Le matériel n'est pas disponible pour cette période");
-                }
-            }
-        }
-
-        // Mettre à jour la réservation
-        reservation.setType(type);
-        reservation.setMateriel(materiel);
-        reservation.setCours(cours);
-        reservation.setEnseignant(enseignant);
-        reservation.setDateReservation(dateReservation);
-        reservation.setHeureDebut(heureDebut);
-        reservation.setHeureFin(heureFin);
-
-        return reservationMaterielRepository.save(reservation);
-    }
+//    public ReservationMateriel modifierReservation(UUID id, String type, UUID idMateriel, UUID idCours,
+//                                                   String matriculeEnseignant, LocalDate dateReservation,
+//                                                   LocalTime heureDebut, LocalTime heureFin) throws IDNotExist, ModificationImpossible {
+//        // Vérifier que la réservation existe
+//        ReservationMateriel reservation = reservationMaterielRepository.findById(id)
+//                .orElseThrow(() -> new IDNotExist("Réservation non trouvée"));
+//
+//        // Si la réservation est déjà confirmée, on ne peut pas la modifier
+//        if (reservation.isConfirmee()) {
+//            throw new ModificationImpossible("Impossible de modifier une réservation confirmée");
+//        }
+//
+//        // Vérifier que le matériel existe
+//        MaterielPedagogique materiel = materielRepository.findById(idMateriel)
+//                .orElseThrow(() -> new IDNotExist("Matériel non trouvé"));
+//
+//        // Vérifier que le cours existe
+//        Cours cours = coursRepository.findById(idCours)
+//                .orElseThrow(() -> new IDNotExist("Cours non trouvé"));
+//
+//        // Vérifier que l'enseignant existe
+//        Enseignant enseignant = enseignantRepository.findByMatricule(matriculeEnseignant)
+//                .orElseThrow(() -> new IDNotExist("Enseignant non trouvé"));
+//
+//
+//        if (!reservation.getMateriel().getIdMateriel().equals(idMateriel) ||
+//                !reservation.getDateReservation().equals(dateReservation) ||
+//                !reservation.getHeureDebut().equals(heureDebut) ||
+//                !reservation.getHeureFin().equals(heureFin)) {
+//
+//            Optional<MaterielPedagogique> optionalMateriel = materielRepository.findById(idMateriel);
+//            if (optionalMateriel.isEmpty()) {
+//                throw new EntityNotFoundException("Matériel introuvable");
+//            }
+//
+//            MaterielPedagogique materiel1 = optionalMateriel.get();
+//
+//// Filtrer uniquement les réservations à la date souhaitée
+//            List<ReservationMateriel> reservations = materiel.getReservationMateriels().stream()
+//                    .filter(res -> res.getDateReservation().equals(dateReservation))
+//                    .toList();
+//
+//            for (ReservationMateriel res : reservations) {
+//                if (!res.getIdReservation().equals(id) && // Exclure la réservation actuelle
+//                        (heureDebut.isBefore(res.getHeureFin()) || heureDebut.equals(res.getHeureFin())) &&
+//                        (heureFin.isAfter(res.getHeureDebut()) || heureFin.equals(res.getHeureDebut()))) {
+//                    throw new ModificationImpossible("Le matériel n'est pas disponible pour cette période");
+//                }
+//            }
+//
+//        }
+//
+//        // Mettre à jour la réservation
+//        reservation.setType(type);
+//        reservation.setMateriel(materiel);
+//        reservation.setCours(cours);
+//        reservation.setEnseignant(enseignant);
+//        reservation.setDateReservation(dateReservation);
+//        reservation.setHeureDebut(heureDebut);
+//        reservation.setHeureFin(heureFin);
+//
+//        return reservationMaterielRepository.save(reservation);
+//    }
 
     // Confirmer une réservation
     public ReservationMateriel confirmerReservation(UUID id) throws IDNotExist {

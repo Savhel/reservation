@@ -18,7 +18,7 @@ public class Cours {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID idCours;
+    private UUID id;
 
     @NonNull
     @Column(nullable = false)

@@ -22,7 +22,7 @@ public class UpdateSalle implements Updatable<Salle> {
         if (oldSalle.isPresent()) {
             Salle newSalle = oldSalle.get();
             newSalle.setNomSalle(salle.getNomSalle());
-            newSalle.setNbPlace(salle.getNbPlace());
+            newSalle.setCapaciteMax(salle.getCapaciteMax());
             newSalle.setCours(salle.getCours());
             return salleRepository.save(newSalle);
         }

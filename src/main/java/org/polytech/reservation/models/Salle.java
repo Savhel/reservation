@@ -56,7 +56,7 @@ public class Salle {
     
     // Méthode pour lister les salles (à implémenter dans le service)
     public static List<Salle> listerSalles() {
-        // Cette méthode sera implémentée dans le service
+
         return null;
     }
 }
